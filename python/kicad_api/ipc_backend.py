@@ -435,7 +435,7 @@ class IPCBoardAPI(BoardAPI):
                     components.append({
                         "reference": fp.reference_field.text.value if fp.reference_field else "",
                         "value": fp.value_field.text.value if fp.value_field else "",
-                        "footprint": str(fp.definition.library_link) if fp.definition else "",
+                        "footprint": str(fp.definition.library_link) if fp.definition and hasattr(fp.definition, 'library_link') else (str(fp.definition.id) if fp.definition and hasattr(fp.definition, 'id') else ""),
                         "position": {
                             "x": to_mm(pos.x) if pos else 0,
                             "y": to_mm(pos.y) if pos else 0,
