@@ -28,7 +28,7 @@ export function registerBoardTools(server: McpServer, callKicadScript: CommandFu
     {
       width: z.number().describe("Board width"),
       height: z.number().describe("Board height"),
-      unit: z.enum(["mm", "inch"]).describe("Unit of measurement")
+      unit: z.enum(["mm", "inch", "mil"]).describe("Unit of measurement")
     },
     async ({ width, height, unit }) => {
       logger.debug(`Setting board size to ${width}x${height} ${unit}`);
@@ -163,7 +163,7 @@ export function registerBoardTools(server: McpServer, callKicadScript: CommandFu
         // Position: top-left corner for rectangles/rounded_rectangle, center for circle
         x: z.number().describe("X coordinate of top-left corner for rectangles (default: 0)"),
         y: z.number().describe("Y coordinate of top-left corner for rectangles (default: 0)"),
-        unit: z.enum(["mm", "inch"]).describe("Unit of measurement")
+        unit: z.enum(["mm", "inch", "mil"]).describe("Unit of measurement")
       }).describe("Parameters for the outline shape")
     },
     async ({ shape, params }) => {
@@ -193,7 +193,7 @@ export function registerBoardTools(server: McpServer, callKicadScript: CommandFu
       position: z.object({
         x: z.number().describe("X coordinate"),
         y: z.number().describe("Y coordinate"),
-        unit: z.enum(["mm", "inch"]).describe("Unit of measurement")
+        unit: z.enum(["mm", "inch", "mil"]).describe("Unit of measurement")
       }).describe("Position of the mounting hole"),
       diameter: z.number().describe("Diameter of the hole"),
       padDiameter: z.number().optional().describe("Optional diameter of the pad around the hole")
@@ -225,7 +225,7 @@ export function registerBoardTools(server: McpServer, callKicadScript: CommandFu
       position: z.object({
         x: z.number().describe("X coordinate"),
         y: z.number().describe("Y coordinate"),
-        unit: z.enum(["mm", "inch"]).describe("Unit of measurement")
+        unit: z.enum(["mm", "inch", "mil"]).describe("Unit of measurement")
       }).describe("Position of the text"),
       layer: z.string().describe("Layer to place the text on"),
       size: z.number().describe("Text size"),
@@ -268,7 +268,7 @@ export function registerBoardTools(server: McpServer, callKicadScript: CommandFu
           y: z.number().describe("Y coordinate")
         })
       ).describe("Points defining the zone outline"),
-      unit: z.enum(["mm", "inch"]).describe("Unit of measurement"),
+      unit: z.enum(["mm", "inch", "mil"]).describe("Unit of measurement"),
       clearance: z.number().optional().describe("Clearance value"),
       minWidth: z.number().optional().describe("Minimum width"),
       padConnection: z.enum(["thermal", "solid", "none"]).optional().describe("Pad connection type")
@@ -300,7 +300,7 @@ export function registerBoardTools(server: McpServer, callKicadScript: CommandFu
   server.tool(
     "get_board_extents",
     {
-      unit: z.enum(["mm", "inch"]).optional().describe("Unit of measurement for the result")
+      unit: z.enum(["mm", "inch", "mil"]).optional().describe("Unit of measurement for the result")
     },
     async ({ unit }) => {
       logger.debug('Getting board extents');

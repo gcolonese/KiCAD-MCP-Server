@@ -206,7 +206,7 @@ export function registerDesignRuleTools(server: McpServer, callKicadScript: Comm
         position: z.object({
           x: z.number().optional(),
           y: z.number().optional(),
-          unit: z.enum(["mm", "inch"]).optional()
+          unit: z.enum(["mm", "inch", "mil"]).optional()
         }).optional().describe("Position to check (if ID not provided)")
       }).describe("First item to check"),
       item2: z.object({
@@ -216,7 +216,7 @@ export function registerDesignRuleTools(server: McpServer, callKicadScript: Comm
         position: z.object({
           x: z.number().optional(),
           y: z.number().optional(),
-          unit: z.enum(["mm", "inch"]).optional()
+          unit: z.enum(["mm", "inch", "mil"]).optional()
         }).optional().describe("Position to check (if ID not provided)")
       }).describe("Second item to check")
     },

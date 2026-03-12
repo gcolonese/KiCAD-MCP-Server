@@ -37,7 +37,7 @@ export function registerComponentTools(
         .object({
           x: z.number().describe("X coordinate"),
           y: z.number().describe("Y coordinate"),
-          unit: z.enum(["mm", "inch"]).describe("Unit of measurement"),
+          unit: z.enum(["mm", "inch", "mil"]).describe("Unit of measurement"),
         })
         .describe("Position coordinates and unit"),
       reference: z
@@ -110,7 +110,7 @@ export function registerComponentTools(
         .object({
           x: z.number().describe("X coordinate"),
           y: z.number().describe("Y coordinate"),
-          unit: z.enum(["mm", "inch"]).describe("Unit of measurement"),
+          unit: z.enum(["mm", "inch", "mil"]).describe("Unit of measurement"),
         })
         .describe("New position coordinates and unit"),
       rotation: z
@@ -438,7 +438,7 @@ export function registerComponentTools(
           y1: z.number(),
           x2: z.number(),
           y2: z.number(),
-          unit: z.enum(["mm", "inch"]).optional(),
+          unit: z.enum(["mm", "inch", "mil"]).optional(),
         })
         .optional()
         .describe("Filter by bounding box region"),
@@ -511,7 +511,7 @@ export function registerComponentTools(
         .object({
           x: z.number(),
           y: z.number(),
-          unit: z.enum(["mm", "inch"]),
+          unit: z.enum(["mm", "inch", "mil"]),
         })
         .describe("Starting position"),
       rows: z.number().describe("Number of rows"),
@@ -617,7 +617,7 @@ export function registerComponentTools(
         .object({
           x: z.number(),
           y: z.number(),
-          unit: z.enum(["mm", "inch"]).optional(),
+          unit: z.enum(["mm", "inch", "mil"]).optional(),
         })
         .describe("Offset from original position"),
       newReference: z.string().optional().describe("New reference designator"),

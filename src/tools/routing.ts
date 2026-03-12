@@ -138,7 +138,7 @@ export function registerRoutingTools(
         .object({
           x: z.number(),
           y: z.number(),
-          unit: z.enum(["mm", "inch"]).optional(),
+          unit: z.enum(["mm", "inch", "mil"]).optional(),
         })
         .optional()
         .describe("Delete trace nearest to this position"),
@@ -181,11 +181,11 @@ export function registerRoutingTools(
           y1: z.number(),
           x2: z.number(),
           y2: z.number(),
-          unit: z.enum(["mm", "inch"]).optional(),
+          unit: z.enum(["mm", "inch", "mil"]).optional(),
         })
         .optional()
         .describe("Filter by bounding box region"),
-      unit: z.enum(["mm", "inch"]).optional().describe("Unit for coordinates"),
+      unit: z.enum(["mm", "inch", "mil"]).optional().describe("Unit for coordinates"),
     },
     async (args: any) => {
       const result = await callKicadScript("query_traces", args);
