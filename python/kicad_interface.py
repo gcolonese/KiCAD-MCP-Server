@@ -14,6 +14,17 @@ import logging
 import os
 from typing import Dict, Any, Optional
 
+# Fix cairo DLL loading on Windows before any cairocffi import
+# cairocffi uses cffi's ffi.dlopen('cairo-2') which needs the DLL on PATH
+if sys.platform == 'win32':
+    for _bin_dir in [os.environ.get('PYTHONPATH', ''), os.path.dirname(sys.executable),
+                     r'C:\Program Files\KiCad\9.0\bin', r'C:\Program Files\KiCad\8.0\bin']:
+        if _bin_dir and os.path.isfile(os.path.join(_bin_dir, 'cairo-2.dll')):
+            _current_path = os.environ.get('PATH', '')
+            if _bin_dir not in _current_path:
+                os.environ['PATH'] = _bin_dir + os.pathsep + _current_path
+            break
+
 # Import tool schemas and resource definitions
 from schemas.tool_schemas import TOOL_SCHEMAS
 from resources.resource_definitions import RESOURCE_DEFINITIONS, handle_resource_read
