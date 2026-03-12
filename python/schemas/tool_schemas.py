@@ -262,7 +262,7 @@ BOARD_TOOLS = [
             "properties": {
                 "unit": {
                     "type": "string",
-                    "enum": ["mm", "inch"],
+                    "enum": ["mm", "inch", "mil"],
                     "description": "Unit for returned coordinates (default: mm)",
                     "default": "mm"
                 }
@@ -825,7 +825,7 @@ ROUTING_TOOLS = [
                     "properties": {
                         "x": {"type": "number", "description": "X coordinate"},
                         "y": {"type": "number", "description": "Y coordinate"},
-                        "unit": {"type": "string", "enum": ["mm", "inch"], "default": "mm"}
+                        "unit": {"type": "string", "enum": ["mm", "inch", "mil"], "default": "mm"}
                     },
                     "required": ["x", "y"]
                 },
@@ -868,7 +868,7 @@ ROUTING_TOOLS = [
                         "y1": {"type": "number", "description": "Top Y coordinate"},
                         "x2": {"type": "number", "description": "Right X coordinate"},
                         "y2": {"type": "number", "description": "Bottom Y coordinate"},
-                        "unit": {"type": "string", "enum": ["mm", "inch"], "default": "mm"}
+                        "unit": {"type": "string", "enum": ["mm", "inch", "mil"], "default": "mm"}
                     }
                 },
                 "includeVias": {
@@ -896,7 +896,7 @@ ROUTING_TOOLS = [
                     "properties": {
                         "x": {"type": "number", "description": "X coordinate"},
                         "y": {"type": "number", "description": "Y coordinate"},
-                        "unit": {"type": "string", "enum": ["mm", "inch"], "default": "mm"}
+                        "unit": {"type": "string", "enum": ["mm", "inch", "mil"], "default": "mm"}
                     },
                     "required": ["x", "y"]
                 },

@@ -344,9 +344,8 @@ class RoutingCommands:
             via = pcbnew.PCB_VIA(self.board)
 
             # Set position
-            scale = (
-                1000000 if position["unit"] == "mm" else 25400000
-            )  # mm or inch to nm
+            _u = position["unit"]
+            scale = 1000000 if _u == "mm" else (25400 if _u == "mil" else 25400000)  # mm, mil, or inch to nm
             x_nm = int(position["x"] * scale)
             y_nm = int(position["y"] * scale)
             via.SetPosition(pcbnew.VECTOR2I(x_nm, y_nm))
@@ -492,9 +491,8 @@ class RoutingCommands:
 
             # Find track by position
             if position:
-                scale = (
-                    1000000 if position["unit"] == "mm" else 25400000
-                )  # mm or inch to nm
+                _u = position["unit"]
+                scale = 1000000 if _u == "mm" else (25400 if _u == "mil" else 25400000)  # mm, mil, or inch to nm
                 x_nm = int(position["x"] * scale)
                 y_nm = int(position["y"] * scale)
                 point = pcbnew.VECTOR2I(x_nm, y_nm)
@@ -611,7 +609,7 @@ class RoutingCommands:
                     # Filter by bounding box
                     if bbox:
                         bbox_unit = bbox.get("unit", "mm")
-                        bbox_scale = scale if bbox_unit == "mm" else 25400000
+                        bbox_scale = scale if bbox_unit == "mm" else (25400 if bbox_unit == "mil" else 25400000)
                         x1 = int(bbox.get("x1", 0) * bbox_scale)
                         y1 = int(bbox.get("y1", 0) * bbox_scale)
                         x2 = int(bbox.get("x2", 0) * bbox_scale)
@@ -731,7 +729,7 @@ class RoutingCommands:
                         break
             elif position:
                 pos_unit = position.get("unit", "mm")
-                pos_scale = scale if pos_unit == "mm" else 25400000
+                pos_scale = scale if pos_unit == "mm" else (25400 if pos_unit == "mil" else 25400000)
                 x_nm = int(position["x"] * pos_scale)
                 y_nm = int(position["y"] * pos_scale)
                 point = pcbnew.VECTOR2I(x_nm, y_nm)
@@ -1188,7 +1186,8 @@ class RoutingCommands:
 
             # Add points to outline
             for point in points:
-                scale = 1000000 if point.get("unit", "mm") == "mm" else 25400000
+                _u = point.get("unit", "mm")
+                scale = 1000000 if _u == "mm" else (25400 if _u == "mil" else 25400000)
                 x_nm = int(point["x"] * scale)
                 y_nm = int(point["y"] * scale)
                 outline.Append(pcbnew.VECTOR2I(x_nm, y_nm))  # Add point to outline
@@ -1375,7 +1374,8 @@ class RoutingCommands:
     def _get_point(self, point_spec: Dict[str, Any]) -> pcbnew.VECTOR2I:
         """Convert point specification to KiCAD point"""
         if "x" in point_spec and "y" in point_spec:
-            scale = 1000000 if point_spec.get("unit", "mm") == "mm" else 25400000
+            _u = point_spec.get("unit", "mm")
+            scale = 1000000 if _u == "mm" else (25400 if _u == "mil" else 25400000)
             x_nm = int(point_spec["x"] * scale)
             y_nm = int(point_spec["y"] * scale)
             return pcbnew.VECTOR2I(x_nm, y_nm)

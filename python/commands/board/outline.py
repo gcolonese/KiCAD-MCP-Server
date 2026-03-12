@@ -73,7 +73,7 @@ class BoardOutlineCommands:
                 }
 
             # Convert to internal units (nanometers)
-            scale = 1000000 if unit == "mm" else 25400000  # mm or inch to nm
+            scale = 1000000 if unit == "mm" else (25400 if unit == "mil" else 25400000)  # mm, mil, or inch to nm
 
             # Create drawing for edge cuts
             edge_layer = self.board.GetLayerID("Edge.Cuts")
@@ -224,9 +224,8 @@ class BoardOutlineCommands:
                 }
 
             # Convert to internal units (nanometers)
-            scale = (
-                1000000 if position.get("unit", "mm") == "mm" else 25400000
-            )  # mm or inch to nm
+            _u = position.get("unit", "mm")
+            scale = 1000000 if _u == "mm" else (25400 if _u == "mil" else 25400000)  # mm, mil, or inch to nm
             x_nm = int(position["x"] * scale)
             y_nm = int(position["y"] * scale)
             diameter_nm = int(diameter * scale)
@@ -311,9 +310,8 @@ class BoardOutlineCommands:
                 }
 
             # Convert to internal units (nanometers)
-            scale = (
-                1000000 if position.get("unit", "mm") == "mm" else 25400000
-            )  # mm or inch to nm
+            _u = position.get("unit", "mm")
+            scale = 1000000 if _u == "mm" else (25400 if _u == "mil" else 25400000)  # mm, mil, or inch to nm
             x_nm = int(position["x"] * scale)
             y_nm = int(position["y"] * scale)
             size_nm = int(size * scale)
