@@ -22,6 +22,7 @@ from resources.resource_definitions import RESOURCE_DEFINITIONS, handle_resource
 
 # Import tool schemas, resource definitions, and IPC API annotations
 from schemas.tool_schemas import TOOL_SCHEMAS
+from utils.eeschema_reloader import trigger_eeschema_reload
 
 _annotation_loader = AnnotationLoader()
 
@@ -545,6 +546,13 @@ class KiCADInterface:
                         # an explicit save_project call.
                         self._auto_save_board()
 
+                    if command in self._SCHEMATIC_MUTATING_COMMANDS:
+                        # Ask eeschema to reload from disk so the UI reflects
+                        # the file write immediately.  Failures are swallowed —
+                        # the file was already written successfully.
+                        sch_path = params.get("schematicPath")
+                        self._trigger_eeschema_reload(schematic_path=sch_path)
+
                 return result
             else:
                 logger.error(f"Unknown command: {command}")
@@ -587,6 +595,32 @@ class KiCADInterface:
         "connect_to_net",
     }
 
+    # Schematic-mutating commands that trigger an eeschema reload via IPC
+    # after writing the .kicad_sch file.  All entries must write the file
+    # on success and return {"success": True, ...}.
+    _SCHEMATIC_MUTATING_COMMANDS = {
+        "add_schematic_component",
+        "delete_schematic_component",
+        "edit_schematic_component",
+        "set_schematic_component_property",
+        "remove_schematic_component_property",
+        "move_schematic_component",
+        "rotate_schematic_component",
+        "add_schematic_wire",
+        "delete_schematic_wire",
+        "add_schematic_net_label",
+        "delete_schematic_net_label",
+        "move_schematic_net_label",
+        "add_schematic_hierarchical_label",
+        "add_sheet_pin",
+        "add_no_connect",
+        "add_schematic_text",
+        "annotate_schematic",
+        "snap_to_grid",
+        "connect_to_net",
+        "connect_passthrough",
+    }
+
     def _auto_save_board(self) -> None:
         """Save board to disk after SWIG mutations.
         Called automatically after every board-mutating SWIG command so that
@@ -600,6 +634,26 @@ class KiCADInterface:
                     logger.debug(f"Auto-saved board to: {board_path}")
         except Exception as e:
             logger.warning(f"Auto-save failed: {e}")
+
+    def _trigger_eeschema_reload(self, schematic_path: Optional[str] = None) -> None:
+        """Ask eeschema to reload from disk after a schematic file write.
+
+        Delegates to ``utils.eeschema_reloader.trigger_eeschema_reload``.
+        Failures are swallowed — the schematic file write already succeeded.
+
+        Args:
+            schematic_path: Path to the ``.kicad_sch`` file that was written.
+                When provided IPC tries to match only that document.
+        """
+        if not (self.use_ipc and self.ipc_backend):
+            return
+        try:
+            trigger_eeschema_reload(
+                self.ipc_backend._kicad,  # type: ignore[union-attr]
+                schematic_path=schematic_path,
+            )
+        except Exception as e:
+            logger.warning(f"eeschema reload bridge error (non-fatal): {e}")
 
     def _update_command_handlers(self) -> None:
         """Update board reference in all command handlers"""
